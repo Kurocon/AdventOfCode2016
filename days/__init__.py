@@ -27,7 +27,14 @@ class AOCDay:
     input_filename = ""
     output_filename = ""
     input_data = None
+
+    # Set to True to always print debug, or a combination of "1", "2", and "c" to print debug for part 1, 2, or common.
+    # E.g. the value "1c" will print debug for part 1 and common.
     print_debug = False
+
+    _running_common = False
+    _running_part1 = False
+    _running_part2 = False
 
     def __init__(self, year, day_number, session_token):
         self.year = year
@@ -46,7 +53,13 @@ class AOCDay:
         print(msg)
 
     def debug(self, msg):
-        if self.print_debug:
+        if self.print_debug == True or (
+                type(self.print_debug) == str and (
+                    (self._running_common and "c" in self.print_debug) or
+                    (self._running_part1 and "1" in self.print_debug) or
+                    (self._running_part2 and "2" in self.print_debug)
+                )
+            ):
             print(msg)
 
     def error(self, msg):
@@ -89,6 +102,7 @@ class AOCDay:
 
             input_data = self.input_data
 
+            self._running_common = True
             start_time = time.time()
             common = self.common(input_data)
             if common:
@@ -96,8 +110,10 @@ class AOCDay:
                 for x in common:
                     dprint(x)
                 dprint("")
-    
+            self._running_common = False
+
             dprint("== Part 1 ==")
+            self._running_part1 = True
             part1 = self.part1(input_data)
             printed = False
             if part1:
@@ -107,9 +123,11 @@ class AOCDay:
                     dprint(x)
             if not printed:
                 dprint("(no output)")
-            dprint("== Ran in {:.3f} ms ==".format((time.time() - start_time)*1000))
+            dprint("== Ran in {:.3f} ms ==".format((time.time() - start_time) * 1000))
+            self._running_part1 = False
             dprint("")
 
+            self._running_common = True
             start_time = time.time()
             common = self.common(input_data)
             if common:
@@ -117,8 +135,10 @@ class AOCDay:
                 for x in common:
                     dprint(x)
                 dprint("")
-    
+            self._running_common = False
+
             dprint("== Part 2 ==")
+            self._running_part2 = True
             part2 = self.part2(input_data)
             printed = False
             if part2:
@@ -128,7 +148,8 @@ class AOCDay:
                     dprint(x)
             if not printed:
                 dprint("(no output)")
-            dprint("== Ran in {:.3f} ms ==".format((time.time() - start_time)*1000))
+            dprint("== Ran in {:.3f} ms ==".format((time.time() - start_time) * 1000))
+            self._running_part2 = False
             dprint("")
 
     def common(self, input_data) -> Generator:
