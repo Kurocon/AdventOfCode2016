@@ -27,6 +27,7 @@ class AOCDay:
     input_filename = ""
     output_filename = ""
     input_data = None
+    print_debug = False
 
     def __init__(self, year, day_number, session_token):
         self.year = year
@@ -40,6 +41,16 @@ class AOCDay:
         else:
             self.output_filename = os.path.join(os.path.dirname(__file__),
                                                 "../outputs/day{}_{}_{}".format(self.day_number, "output", self.creator))
+
+    def log(self, msg):
+        print(msg)
+
+    def debug(self, msg):
+        if self.print_debug:
+            print(msg)
+
+    def error(self, msg):
+        print(msg, file=sys.stderr)
 
     def download_input(self):
         if os.path.isfile(self.input_filename):
