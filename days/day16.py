@@ -19,7 +19,7 @@ class Day16(AOCDay):
         else:
             return check
 
-    def common(self, input_data):
+    def test(self, input_data):
         assert self.dragon_curve("1") == "100", f'{self.dragon_curve("1")} != "100"'
         assert self.dragon_curve("0") == "001", f'{self.dragon_curve("0")} != "001"'
         assert self.dragon_curve("11111") == "11111000000", f'{self.dragon_curve("11111")} != "11111000000"'
